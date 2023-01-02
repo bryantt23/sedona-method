@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const questions = [
   'What is your now feeling?',
@@ -14,34 +14,21 @@ const buttonTextWants = [
   'Yes/No'
 ];
 
-class Wants extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      index: 0
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+function Wants(props) {
+  const [index, setIndex] = useState(0);
 
-  handleChange(event) {
-    this.setState({
-      index:
-        this.state.index === questions.length - 1
-          ? this.props.handleChange(1)
-          : this.state.index + 1
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <div>{questions[this.state.index]}</div>
-        <button onClick={this.handleChange}>
-          {buttonTextWants[this.state.index]}
-        </button>
-      </div>
+  function handleChangeLocal(event) {
+    setIndex(
+      index === questions.length - 1 ? props.handleChange(1) : index + 1
     );
   }
+
+  return (
+    <div>
+      <div>{questions[index]}</div>
+      <button onClick={handleChangeLocal}>{buttonTextWants[index]}</button>
+    </div>
+  );
 }
 
 export default Wants;
