@@ -6,3 +6,7 @@ div:first-child {
   font-size: 48px;
   height: 350px;
 }
+
+button {
+  font-size: 36px;
+}
