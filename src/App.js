@@ -1,63 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Basic from './Basic';
 import Wants from './Wants';
 import TripleWelcome from './TripleWelcome';
 //
 // https://codepen.io/bryantt23/pen/ZEQVEdZ
 // https://stackoverflow.com/questions/39210971/this-setstate-is-undefined
-const maxNum = 3;
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      number: 0,
-      component: this.generateComponent()
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+function App() {
+  const [number, setNumber] = useState(2);
+  const [component, setComponent] = useState();
 
-  handleChange = event => {
+  // https://stackoverflow.com/questions/54069253/the-usestate-set-method-is-not-reflecting-a-change-immediately
+  useEffect(() => {
+    setComponent(generateComponent(number));
+  }, [number]);
+
+  function handleChange(event) {
     function randomIntFromInterval(min, max) {
       // min and max included
       return Math.floor(Math.random() * (max - min + 1) + min);
     }
-    // let nextNum = randomIntFromInterval(0, 2);
-    let nextNum = (this.state.number + 1) % 3; //0 1 2 repeat
-    while (nextNum === this.state.number) {
+
+    let nextNum = randomIntFromInterval(0, 2);
+    while (nextNum === number) {
       nextNum = randomIntFromInterval(0, 2);
     }
 
-    this.setState(
-      {
-        number: nextNum
-      },
-      () => {
-        this.setState({ component: this.generateComponent() });
-      }
-    );
-  };
+    setNumber(nextNum);
+  }
 
-  generateComponent() {
-    const index = this.state === undefined ? 0 : this.state.number;
-    if (index == 0) {
-      return <Basic handleChange={this.handleChange} />;
-    } else if (index == 1) {
-      return <Wants handleChange={this.handleChange} />;
+  function generateComponent(index) {
+    if (index === 0) {
+      return <Basic handleChange={handleChange} />;
+    } else if (index === 1) {
+      return <Wants handleChange={handleChange} />;
     } else {
-      return <TripleWelcome handleChange={this.handleChange} />;
+      return <TripleWelcome handleChange={handleChange} />;
     }
   }
 
-  render() {
-    const index = this.state.number;
-    return (
-      <div>
-        <br />
-        <div>{this.state.component}</div>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <br />
+      {number}
+      <div>{component}</div>
+    </div>
+  );
 }
 
 export default App;
