@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const buttonText = {
   start: 'Next',
@@ -7,7 +7,7 @@ const buttonText = {
   now: 'Now'
 };
 
-const process = {
+const processObject = {
   start: 'What is your now feeling?',
   welcome:
     'Could you welcome this feeling? Yes or no are both acceptable answers.',
@@ -19,88 +19,76 @@ const process = {
   free: 'Would you rather have this feeling, or would you rather be free?'
 };
 
-class Basic extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      process: 'start',
-      button: 'start'
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+function Basic(props) {
+  const [process, setProcess] = useState('start');
+  const [buttonState, setButtonState] = useState('start');
 
-  handleChange(event) {
-    let processState, buttonTextState;
-    switch (this.state.process) {
+  function handleChangeLocal(event) {
+    switch (process) {
       case 'start':
         // code block
-        this.setState({ process: 'welcome' });
-        this.setState({ button: 'welcome' });
+        setProcess('welcome');
+        setButtonState('welcome');
         break;
       case 'welcome':
-        this.setState({ process: 'could' });
-        this.setState({ button: 'could' });
+        setProcess('could');
+        setButtonState('could');
         break;
       case 'could':
-        this.setState({ process: 'would' });
-        this.setState({ button: 'would' });
+        setProcess('would');
+        setButtonState('would');
         break;
       case 'would':
         if (event === 'no') {
-          this.setState({ process: 'free' });
-          this.setState({ button: 'free' });
+          setProcess('free');
+          setButtonState('free');
         } else {
-          this.setState({ process: 'when' });
-          this.setState({ button: 'now' });
+          setProcess('when');
+          setButtonState('now');
         }
         break;
       case 'free':
-        this.setState({ process: 'when' });
-        this.setState({ button: 'now' });
+        setProcess('when');
+        setButtonState('now');
         break;
       case 'when':
-        this.props.handleChange(0);
+        props.handleChange(0);
         break;
       default:
     }
   }
 
-  render() {
-    const buttonState = this.state.button;
-    let button;
+  let button;
 
-    if (buttonState === 'start') {
-      button = (
-        <button onClick={this.handleChange}>
-          {buttonText[this.state.button]}
-        </button>
-      );
-    } else if (
-      buttonState === 'welcome' ||
-      buttonState === 'could' ||
-      buttonState === 'would'
-    ) {
-      button = (
-        <div>
-          <button onClick={this.handleChange}>Yes</button>
-          <button onClick={() => this.handleChange('no')}>No</button>
-        </div>
-      );
-    } else if (buttonState === 'free') {
-      button = (
-        <button onClick={this.handleChange}>I would rather be free</button>
-      );
-    } else if (buttonState === 'now') {
-      button = <button onClick={this.handleChange}>Now</button>;
-    }
-
-    return (
+  if (buttonState === 'start') {
+    button = (
+      <button onClick={handleChangeLocal}>{buttonText[buttonState]}</button>
+    );
+  } else if (
+    buttonState === 'welcome' ||
+    buttonState === 'could' ||
+    buttonState === 'would'
+  ) {
+    button = (
       <div>
-        <div>{process[this.state.process]}</div>
-        {button}
+        <button onClick={handleChangeLocal}>Yes</button>
+        <button onClick={() => handleChangeLocal('no')}>No</button>
       </div>
     );
+  } else if (buttonState === 'free') {
+    button = (
+      <button onClick={handleChangeLocal}>I would rather be free</button>
+    );
+  } else if (buttonState === 'now') {
+    button = <button onClick={handleChangeLocal}>Now</button>;
   }
+
+  return (
+    <div>
+      <div>{processObject[process]}</div>
+      {button}
+    </div>
+  );
 }
 
 export default Basic;
