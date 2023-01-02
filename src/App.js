@@ -3,6 +3,7 @@ import Basic from './Basic';
 import Wants from './Wants';
 import TripleWelcome from './TripleWelcome';
 import FreeWay from './FreeWay';
+import './App.css';
 
 // https://codepen.io/bryantt23/pen/ZEQVEdZ
 // https://stackoverflow.com/questions/39210971/this-setstate-is-undefined
@@ -14,7 +15,7 @@ function randomIntFromInterval(min, max) {
 
 const maxNum = 3;
 function App() {
-  const [number, setNumber] = useState(randomIntFromInterval(0, maxNum));
+  const [number, setNumber] = useState(0);
   const [component, setComponent] = useState();
 
   // https://stackoverflow.com/questions/54069253/the-usestate-set-method-is-not-reflecting-a-change-immediately
@@ -43,7 +44,7 @@ function App() {
     }
   }
 
-  return <div>{component}</div>;
+  return <>{component}</>;
 }
 
 export default App;
